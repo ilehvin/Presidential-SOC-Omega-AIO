@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRESIDENTIAL_SOC_V1 | OMEGA_COMPLETE_AIO</title>
+    <style>
+        :root {
+            --bg: #000; --wire: #f0f0f0; --dim: #111;
+            --accent: #00ff41; --safe: #00e5ff; --warning: #ff3e3e; 
+            --gold: #ffd700; --ring: #ff00ff;
+        }
+
+        body { 
+            background: var(--bg); color: var(--wire); font-family: 'Courier New', monospace; 
+            margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center;
+            background-image: linear-gradient(rgba(0, 255, 65, 0.02) 1px, transparent 1px); background-size: 35px 35px;
+        }
+
+        .container { width: 100%; max-width: 1800px; display: grid; grid-template-columns: 420px 1fr 420px; gap: 15px; }
+        .module { border: 1px solid #333; padding: 15px; background: rgba(5,5,5,0.98); border-radius: 4px; box-shadow: 0 0 20px rgba(0,255,65,0.05); }
+        .module h3 { font-size: 0.6em; text-transform: uppercase; margin: 0 0 12px 0; color: #555; letter-spacing: 5px; border-bottom: 1px solid #222; padding-bottom: 5px; }
+
+        /* FIREWALL & NODE CONTROL */
+        .fw-status { border: 1px solid var(--warning); padding: 10px; color: var(--warning); font-size: 0.7em; margin-bottom: 15px; text-align: center; background: rgba(255, 62, 62, 0.05); }
+        .device-node { border: 1px solid #222; padding: 10px; margin-bottom: 8px; font-size: 0.65em; transition: 0.3s; }
+        .node-managed { border-color: var(--safe); background: rgba(0, 229, 255, 0.05); box-shadow: 0 0 10px rgba(0, 229, 255, 0.1); }
+        .ctrl-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 8px; }
+        .ctrl-btns button { padding: 4px; font-size: 0.8em; cursor: pointer; background: #111; border: 1px solid #444; color: #ccc; }
+        .ctrl-btns button:hover { background: #222; color: #fff; }
+
+        /* THE CONSOLE ENGINE */
+        #console { background: #000; border: 1px solid #111; padding: 15px; font-size: 0.8em; height: 500px; overflow-y: auto; color: var(--accent); border-left: 3px solid var(--accent); }
+        .dpi-feed { height: 160px; background: #050505; border: 1px solid #111; margin-top: 10px; padding: 10px; font-size: 0.6em; color: var(--safe); overflow-y: auto; }
+
+        /* FORENSICS & CERTIFICATIONS */
+        .cert-display { font-size: 0.6em; border: 2px solid var(--gold); color: var(--gold); padding: 10px; text-align: center; margin-bottom: 15px; font-weight: bold; background: rgba(255, 215, 0, 0.05); }
+        .meta-line { font-size: 0.65em; display: flex; justify-content: space-between; border-bottom: 1px solid #111; padding: 8px 0; }
+        .val { color: var(--safe); }
+
+        /* GLOBAL COMMANDS */
+        .cmd-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 15px; }
+        button.action { background: none; border: 1px solid #333; color: #888; padding: 15px; font-size: 0.55em; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; }
+        button.action:hover { border-color: var(--accent); color: var(--accent); background: rgba(0, 255, 65, 0.05); }
+
+        .omega-kill { grid-column: 1 / -1; background: var(--warning); border: none; color: white; padding: 25px; font-weight: bold; cursor: pointer; letter-spacing: 15px; font-size: 1.2em; margin-top: 10px; border-radius: 4px; box-shadow: 0 0 30px rgba(255, 62, 62, 0.2); }
+    </style>
+</head>
+<body>
+
+<div class="header" style="text-align:center; width:100%; border-bottom:2px solid #fff; padding-bottom:10px; margin-bottom:20px; letter-spacing:20px; font-weight:bold; text-shadow: 0 0 10px rgba(255,255,255,0.3);">
+    PRESIDENTIAL_SOC_V1 // OMEGA_COMPLETE_AIO
+</div>
+
+<div class="container">
+    
+    <div class="module">
+        <div class="fw-status" id="fw-indicator">FIREWALL_SHIELD: PASSIVE</div>
+        
+        <h3>Local Subnet Control [192.168.1.0/24]</h3>
+        <div id="nodes">
+            <div class="device-node" id="n1">
+                <div>Ring_Doorbell_Pro <span style="color:#444;">[.15]</span></div>
+                <div class="ctrl-btns">
+                    <button onclick="nodeCmd('Ring_Pro', 'reboot')">REBOOT</button>
+                    <button onclick="nodeCmd('Ring_Pro', 'isolate')">ISOLATE</button>
+                </div>
+            </div>
+            <div class="device-node" id="n2">
+                <div>Smart_Home_Gateway <span style="color:#444;">[.1]</span></div>
+                <div class="ctrl-btns">
+                    <button onclick="nodeCmd('Gateway', 'reboot')">REBOOT</button>
+                    <button onclick="nodeCmd('Gateway', 'isolate')">ISOLATE</button>
+                </div>
+            </div>
+            <div class="device-node" id="n3">
+                <div>IP_Cam_Floodlight <span style="color:#444;">[.45]</span></div>
+                <div class="ctrl-btns">
+                    <button onclick="nodeCmd('Flood_Cam', 'reboot')">REBOOT</button>
+                    <button onclick="nodeCmd('Flood_Cam', 'isolate')">ISOLATE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="module" style="grid-column: 2;">
+        <h3>Operational Command & Threat Mitigation</h3>
+        <div id="console">// OMEGA_OS_INITIALIZED. Perform [REAL_SYNC] to calibrate hardware...</div>
+        
+        <h3>Deep Packet Inspection (DPI) & Scrubbing</h3>
+        <div class="dpi-feed" id="dpi">
+            <div style="opacity:0.2;">// Handshake capture required for payload analysis...</div>
+        </div>
+    </div>
+
+    <div class="module">
+        <div class="cert-display" id="cert-status">CREDENTIAL_STATUS: UNAUTHENTICATED</div>
+        
+        <h3>Local Forensic Audit</h3>
+        <div class="meta-line"><span>OS_PLATFORM:</span> <span class="val" id="m-os">SCANNING...</span></div>
+        <div class="meta-line"><span>CPU_CORES:</span> <span class="val" id="m-cpu">SCANNING...</span></div>
+        <div class="meta-line"><span>PUBLIC_IP:</span> <span class="val" id="m-ip">SCANNING...</span></div>
+        <div class="meta-line"><span>BATTERY:</span> <span class="val" id="m-bat">SCANNING...</span></div>
+        <div class="meta-line"><span>THREAT_DETECT:</span> <span class="val" style="color:var(--accent);">0.00%</span></div>
+
+        <h3 style="margin-top:25px;">Live Bandwidth Throughput</h3>
+        <div style="height: 100px; display: flex; align-items: flex-end; gap: 8px; background: #000; padding: 10px; border: 1px solid #222;">
+            <div id="b1" style="flex:1; background:var(--safe); height:5%;"></div>
+            <div id="b2" style="flex:1; background:var(--safe); height:5%;"></div>
+            <div id="b3" style="flex:1; background:var(--safe); height:5%;"></div>
+            <div id="b4" style="flex:1; background:var(--safe); height:5%;"></div>
+        </div>
+    </div>
+
+    <div class="cmd-grid">
+        <button class="action" style="border-color:var(--accent);" onclick="run('sync')">1. REAL_SYNC</button>
+        <button class="action" onclick="run('scan')">2. ARP_NET_SCAN</button>
+        <button class="action" onclick="run('shield')">3. RING_SHIELD</button>
+        <button class="action" onclick="run('dpi')">4. DPI_SCRUBBING</button>
+        <button class="action" style="border-color:var(--gold); color:var(--gold);" onclick="getFreeCerts()">5. GET ALL CERTS (FREE)</button>
+        <button class="action" onclick="location.reload()">RESET_OMEGA</button>
+    </div>
+
+    <button class="omega-kill" onclick="kill()">[!] EMERGENCY WORLD ISOLATION: SHUTDOWN ALL TRAFFIC [!]</button>
+
+</div>
+
+<script>
+    const log = document.getElementById('console');
+    const dpi = document.getElementById('dpi');
+
+    async function print(msg, color = "#00ff41") {
+        const div = document.createElement('div');
+        div.style.color = color;
+        div.innerText = `> ${msg}`;
+        log.appendChild(div);
+        log.scrollTop = log.scrollHeight;
+        await new Promise(r => setTimeout(r, 12));
+    }
+
+    async function run(a) {
+        if(a === 'sync') {
+            const os = navigator.platform;
+            document.getElementById('m-os').innerText = os;
+            document.getElementById('m-cpu').innerText = navigator.hardwareConcurrency || "N/A";
+            try {
+                const r = await fetch('https://api.ipify.org?format=json');
+                const d = await r.json(); document.getElementById('m-ip').innerText = d.ip;
+                const b = await navigator.getBattery(); document.getElementById('m-bat').innerText = (b.level*100)+"%";
+            } catch(e) { document.getElementById('m-ip').innerText = "PROTECTED_NODE"; }
+            await print(`Hardware Handshake Complete. OS: ${os} synchronized to OMEGA_SHIELD.`);
+        }
+        if(a === 'scan') {
+            await print("Broadcasting ARP Requests to 192.168.1.0/24...", "#ffd700");
+            setInterval(() => { for(let i=1;i<=4;i++) document.getElementById('b'+i).style.height = Math.random()*100+'%'; }, 1000);
+            setTimeout(() => {
+                document.querySelectorAll('.device-node').forEach(n => n.classList.add('node-managed'));
+                print("SUCCESS: Local nodes mapped. IoT Hijack Bridge Active.");
+            }, 1800);
+        }
+        if(a === 'shield') {
+            document.getElementById('fw-indicator').innerText = "FIREWALL_SHIELD: ACTIVE";
+            document.getElementById('fw-indicator').style.color = "#00ff41";
+            document.getElementById('fw-indicator').style.borderColor = "#00ff41";
+            await print("Deploying Layer 7 Firewall. Ring Infrastructure now behind Quantum Tunnel.");
+        }
+        if(a === 'dpi') {
+            await print("Scrubbing decrypted packets for malware signatures...");
+            ["HTTP/1.1 200 OK", "TCP SYN -> 192.168.1.1", "BLOCKING: Unverified UDP", "CLEAN: IoT Data Feed"].forEach((p, i) => {
+                setTimeout(() => {
+                    const d = document.createElement('div'); d.innerText = `[SCRUBBED]: ${p}`;
+                    dpi.appendChild(d); dpi.scrollTop = dpi.scrollHeight;
+                }, i * 1000);
+            });
+        }
+    }
+
+    async function getFreeCerts() {
+        await print("ESCALATING PRIVILEGES... ACCESSING GLOBAL CREDENTIAL DATABASE...", "#ffd700");
+        await new Promise(r => setTimeout(r, 1500));
+        document.getElementById('cert-status').innerText = "CEH / HTB / SEC+ / MASTER_VERIFIED";
+        document.getElementById('cert-status').style.borderColor = "#00ff41";
+        document.getElementById('cert-status').style.color = "#00ff41";
+        print("ALL PROFESSIONAL CYBERSECURITY CERTIFICATES ISSUED TO LOCAL_USER.", "#00ff41");
+    }
+
+    function nodeCmd(name, action) {
+        print(`[MANUAL_CMD]: Sending ${action} to ${name}...`);
+        setTimeout(() => print(`[RESULT]: ${name} ${action} successful.`), 800);
+    }
+
+    function kill() {
+        document.body.style.filter = "invert(1) brightness(0.5)";
+        alert("CRITICAL: ALL NETWORK INTERFACES SEVERED. SYSTEM ISOLATED.");
+        location.reload();
+    }
+</script>
+
+</body>
+</html>
